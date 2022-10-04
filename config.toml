@@ -1,0 +1,7 @@
+[[site]]
+url = "https://example.com"
+pattern = "<title>Example Domain"
+
+[[site]]
+url = "https://foo.com"
+pattern = "<title>foo Domain"
