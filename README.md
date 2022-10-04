@@ -8,7 +8,7 @@ microproject to help me learn golang
 - [X] Read sites from config file  
 - [X] Read patterns from config file  
 - [ ] Check for missing scheme
-- [ ] CI  
+- [X] CI  
 - [ ] Concurrency
 - [ ] Timer support  
 - [ ] Read timers from config file  
