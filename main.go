@@ -46,8 +46,11 @@ func getConfig(f string) (c Config) {
 
 func getPage(url string) (page string, err error) {
 
-	resp, err := http.Get(url)
+	client := http.Client{
+		Timeout: 5 * time.Second,
+	}
 
+	resp, err := client.Get(url)
 	if err != nil {
 		return
 	}
