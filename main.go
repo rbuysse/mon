@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -19,6 +20,11 @@ type Config struct {
 type Site struct {
 	Url     string `toml:"url"`
 	Pattern string `toml:"pattern"`
+}
+
+type Result struct {
+	Url   string
+	Error error
 }
 
 func checkForPattern(body string, pattern string) (check bool) {
@@ -44,7 +50,9 @@ func getConfig(f string) (c Config) {
 	return c
 }
 
-func checkPage(url string, pattern string, ch chan<- string) {
+func checkPage(url string, pattern string, ch chan<- Result) {
+	var res Result
+	res.Url = url
 	client := http.Client{
 		Timeout: 5 * time.Second,
 	}
@@ -61,28 +69,36 @@ func checkPage(url string, pattern string, ch chan<- string) {
 	}
 
 	if err != nil {
-		fmt.Printf("ERROR: %s - %s\n", url, err)
+		res.Error = err
 	} else {
 		patternExists := checkForPattern(string(body), pattern)
 		if patternExists == true {
 		} else {
-			fmt.Printf("ERROR: %s - Pattern not found: %s\n", url, pattern)
+			m := fmt.Sprintf("ERROR: %s - Pattern not found: %s\n", url, pattern)
+			err := errors.New(m)
+			res.Error = err
 		}
 	}
+
+	ch <- res
 }
 
 func main() {
 	configFile := "config.toml"
 	for {
 		c := getConfig(configFile)
-		ch := make(chan string)
+		ch := make(chan Result)
 
 		for i := 0; i < len(c.Sites); i++ {
-			fmt.Println(c.Sites[i].Url)
 			urlToCheck := c.Sites[i].Url
 			pattern := c.Sites[i].Pattern
 			go checkPage(urlToCheck, pattern, ch)
 
+		}
+
+		for i := 0; i < len(c.Sites); i++ {
+			ret := <-ch
+			fmt.Println(ret.Url)
 		}
 		time.Sleep(5 * time.Second)
 	}
