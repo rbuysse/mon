@@ -10,6 +10,7 @@ microproject to help me learn golang
 - [ ] Check for missing scheme
 - [X] CI  
 - [X] Concurrency
+- [X] Log request duration
 - [ ] Timer support  
 - [ ] Read timers from config file  
 - [ ] Test config file reads
