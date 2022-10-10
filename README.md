@@ -9,7 +9,7 @@ microproject to help me learn golang
 - [X] Read patterns from config file  
 - [ ] Check for missing scheme
 - [X] CI  
-- [ ] Concurrency
+- [X] Concurrency
 - [ ] Timer support  
 - [ ] Read timers from config file  
 - [ ] Test config file reads
