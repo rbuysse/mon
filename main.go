@@ -74,7 +74,7 @@ func checkPage(url string, pattern string, ch chan<- Result) {
 		patternExists := checkForPattern(string(body), pattern)
 		if patternExists == true {
 		} else {
-			m := fmt.Sprintf("ERROR: %s - Pattern not found: %s\n", url, pattern)
+			m := fmt.Sprintf("ERROR: %s - Pattern not found: %s", url, pattern)
 			err := errors.New(m)
 			res.Error = err
 		}
