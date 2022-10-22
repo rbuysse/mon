@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+
+  mon:
+    build:
+      context: ./
+    volumes:
+      - ./:/project
+    image: mon
+    command: |
+        bash -c "
+            tail -f /dev/null
+        "
+    environment:
+      INFLUXDB_BUCKET: "mon"
+      INFLUXDB_ORG: "mon"
+      INFLUXDB_PASSWORD: "admin1234"
+      INFLUXDB_TOKEN: "12345"
+      INFLUXDB_USERNAME: "admin"
+      INFLUXDB_URL: "http://influxdb:8086"
+
+  influxdb:
+      image: influxdb:latest
+      environment:
+          DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "12345"
+          DOCKER_INFLUXDB_INIT_BUCKET: "mon"
+          DOCKER_INFLUXDB_INIT_MODE: "setup"
+          DOCKER_INFLUXDB_INIT_ORG: "mon"
+          DOCKER_INFLUXDB_INIT_PASSWORD: "admin1234"
+          DOCKER_INFLUXDB_INIT_USERNAME: "admin"
+      ports:
+      - "8086:8086"
